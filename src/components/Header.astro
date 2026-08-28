@@ -206,6 +206,38 @@ const stream = row + row;
     if (!(e.target as HTMLElement).closest('.grp')) close();
   });
 
+  // Floating header. It is transparent at rest; it takes a frosted ground
+  // once anything scrolls under it, and switches to white type while it
+  // sits over the homepage's dark hero. Without the second mode, white
+  // type would be invisible on every page that opens light — which is
+  // every page but the homepage.
+  const top = document.querySelector<HTMLElement>('header.top');
+  const shero = document.querySelector<HTMLElement>('.hx-shero');
+
+  if (top) {
+    const headH = () => top.offsetHeight;
+    let ticking = false;
+
+    const sync = () => {
+      ticking = false;
+      const y = window.scrollY;
+      // While over the hero: transparent, white. Past it: frosted, ink.
+      const overDark = shero ? y < shero.offsetHeight - headH() : false;
+      top.classList.toggle('over-dark', overDark);
+      top.classList.toggle('solid', !overDark && y > 6);
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(sync);
+    };
+
+    sync();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+  }
+
   const burger = document.getElementById('burger');
   const drawer = document.getElementById('drawer');
   burger?.addEventListener('click', () => drawer?.classList.toggle('open'));

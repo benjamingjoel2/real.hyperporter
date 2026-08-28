@@ -106,26 +106,56 @@ body::after{
 #ann-x{background:none;border:0;color:rgba(255,255,255,.55);font-size:20px;line-height:1;padding:6px;flex-shrink:0}
 #ann-x:hover{color:#fff}
 
-header.top{position:sticky;top:0;z-index:70;background:rgba(16,15,14,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.10);color:#fff}
+/* Floating and transparent at rest. Two colour modes, driven by what is
+   behind it: white while it sits over the dark hero, ink once the page
+   underneath is light. It gains a frosted ground on scroll so it stays
+   readable over whatever passes beneath. */
+header.top{
+  position:sticky;top:0;z-index:70;
+  background:transparent;
+  /* The hairline is an inset shadow, not a border: a border would add a
+     pixel to the header's height, and the hero is offset by that height.
+     One stray pixel there showed as a light seam across the top. */
+  border-bottom:0;box-shadow:inset 0 -1px 0 transparent;
+  --h-fg:var(--paper);--h-dim:var(--muted);--h-line:var(--line);
+  --h-btn-bg:var(--paper);--h-btn-fg:var(--void);
+  color:var(--h-fg);
+  transition:background .3s,box-shadow .3s,backdrop-filter .3s;
+}
+header.top.over-dark{
+  --h-fg:#fff;--h-dim:rgba(255,255,255,.74);--h-line:rgba(255,255,255,.20);
+  --h-btn-bg:#fff;--h-btn-fg:var(--dark);
+}
+header.top.solid{
+  background:rgba(250,250,249,.82);
+  backdrop-filter:blur(16px) saturate(150%);
+  box-shadow:inset 0 -1px 0 var(--line);
+}
+/* The homepage hero runs up behind the bar, which is the whole point of
+   floating it. --head-h is the bar plus the rail. */
+:root{--head-h:106px}
+@media(max-width:640px){:root{--head-h:98px}}
+.hx-shero{margin-top:calc(-1 * var(--head-h));padding-top:calc(var(--head-h) + clamp(60px,9vw,130px))}
+@media(prefers-reduced-motion:reduce){header.top{transition:none}}
 .bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:74px;display:flex;align-items:center;gap:38px}
 .mark{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
-.mark .glyph{width:27px;height:27px;display:block;color:#fff;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.mark .glyph{width:27px;height:27px;display:block;color:var(--h-fg);transition:transform .5s cubic-bezier(.2,.8,.2,1),color .3s}
 .mark .glyph svg{width:100%;height:100%;display:block}
 .mark .glyph svg rect{fill:currentColor}
 .mark .glyph svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
 .mark:hover .glyph{transform:rotate(90deg)}
-.mark .word{font-family:var(--display);font-weight:400;font-size:15px;letter-spacing:.13em;text-transform:uppercase;color:#fff}
+.mark .word{font-family:var(--display);font-weight:400;font-size:15px;letter-spacing:.13em;text-transform:uppercase;color:var(--h-fg);transition:color .3s}
 
 /* nav sits beside the wordmark, left-aligned, as the reference does */
 .links{display:flex;align-items:center;gap:6px;margin-right:auto}
-.links a.flat,.grp-b{background:none;border:0;color:rgba(255,255,255,.66);padding:9px 12px;font-size:15.5px;letter-spacing:-.01em;border-radius:4px;text-decoration:none;position:relative;display:inline-flex;align-items:center;gap:6px;transition:color .2s}
-.links a.flat:hover,.grp-b:hover{color:#fff}
-.links a.flat.act,.grp-b.act{color:#fff}
-.links a.flat.act::after,.grp-b.act::after{content:"";position:absolute;left:12px;right:12px;bottom:3px;height:1px;background:#fff}
+.links a.flat,.grp-b{background:none;border:0;color:var(--h-dim);padding:9px 12px;font-size:15.5px;letter-spacing:-.01em;border-radius:4px;text-decoration:none;position:relative;display:inline-flex;align-items:center;gap:6px;transition:color .25s}
+.links a.flat:hover,.grp-b:hover{color:var(--h-fg)}
+.links a.flat.act,.grp-b.act{color:var(--h-fg)}
+.links a.flat.act::after,.grp-b.act::after{content:"";position:absolute;left:12px;right:12px;bottom:3px;height:1px;background:var(--h-fg)}
 .chev{width:11px;height:7px;opacity:.55;transition:transform .25s}
 .grp{position:relative}
 .grp.open .chev{transform:rotate(180deg)}
-.grp.open .grp-b{color:#fff}
+.grp.open .grp-b{color:var(--h-fg)}
 .grp-p{position:absolute;z-index:9;top:calc(100% + 10px);left:0;min-width:290px;background:var(--raise);border:1px solid var(--line);border-radius:7px;box-shadow:0 20px 50px rgba(17,17,16,.13);padding:8px;opacity:0;visibility:hidden;transform:translateY(-5px);transition:opacity .2s,transform .2s,visibility .2s}
 .grp.open .grp-p{opacity:1;visibility:visible;transform:none}
 .grp-p a{display:block;padding:11px 13px;border-radius:5px;text-decoration:none;transition:background .18s}
@@ -135,29 +165,29 @@ header.top{position:sticky;top:0;z-index:70;background:rgba(16,15,14,.94);backdr
 /* a hover bridge, so the pointer can cross the gap without the panel shutting */
 .grp::after{content:"";position:absolute;top:100%;left:0;right:0;height:12px}
 
-.sys{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:0 18px;flex-shrink:0;border-left:1px solid var(--line);height:100%;background:var(--ink);position:relative;z-index:1}
-.sys i{width:5px;height:5px;border-radius:50%;background:var(--dim);animation:blip 2.6s ease-in-out infinite}
+.sys{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--h-dim);padding:0 18px;flex-shrink:0;border-left:1px solid var(--h-line);height:100%;background:none;position:relative;z-index:1;transition:color .3s}
+.sys i{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blip 2.6s ease-in-out infinite}
 @keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
-.cta-nav{background:#fff;color:var(--dark);border:1px solid #fff;padding:11px 20px;border-radius:4px;font-weight:400;font-size:15px;letter-spacing:-.01em;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:background .22s,color .22s}
-.cta-nav:hover{background:transparent;color:#fff}
-.burger{display:none;background:none;border:1px solid rgba(255,255,255,.28);border-radius:6px;padding:10px;margin-left:auto}
-.burger span{display:block;width:18px;height:1.5px;background:#fff;margin:4px 0}
-.drawer{display:none;background:var(--dark-2);border-top:1px solid rgba(255,255,255,.10)}
+.cta-nav{background:var(--h-btn-bg);color:var(--h-btn-fg);border:1px solid var(--h-btn-bg);padding:11px 20px;border-radius:4px;font-weight:400;font-size:15px;letter-spacing:-.01em;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:background .25s,color .25s,border-color .25s}
+.cta-nav:hover{background:transparent;color:var(--h-fg);border-color:var(--h-fg)}
+.burger{display:none;background:none;border:1px solid var(--h-line);border-radius:6px;padding:10px;margin-left:auto}
+.burger span{display:block;width:18px;height:1.5px;background:var(--h-fg);margin:4px 0}
+.drawer{display:none;background:var(--raise);border-top:1px solid var(--line);box-shadow:0 20px 40px rgba(17,17,16,.12)}
 .drawer.open{display:block}
-.drawer a{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.10);color:rgba(255,255,255,.72);padding:17px var(--pad);font-size:16px;text-decoration:none}
-.drawer a:last-child{color:#fff;border-bottom:0}
+.drawer a{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);color:var(--muted);padding:17px var(--pad);font-size:16px;text-decoration:none}
+.drawer a:last-child{color:var(--paper);border-bottom:0}
 
 @media(max-width:1080px){.links{display:none}.burger{display:block}.cta-nav{display:none}}
 
 /* ---- dispatch rail (signature) ---- */
-.rail{height:32px;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line);background:var(--ink);position:relative;z-index:0}
-.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid var(--line);background:var(--void);position:relative;z-index:1}
+.rail{height:32px;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--h-line);background:none;position:relative;z-index:0}
+.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--h-fg);padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid var(--h-line);background:none;position:relative;z-index:1;transition:color .3s}
 .rail-track{flex:1;min-width:0;overflow:hidden;height:100%;display:flex;align-items:center}
 .rail .stream{display:flex;white-space:nowrap;animation:march 58s linear infinite}
 .rail .stream:hover{animation-play-state:paused}
-.rail .ent{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:0 26px;display:flex;align-items:center;gap:9px}
-.rail .ent b{color:var(--muted);font-weight:400}
-.rail .ent u{text-decoration:none;color:var(--signal)}
+.rail .ent{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--h-dim);padding:0 26px;display:flex;align-items:center;gap:9px;transition:color .3s}
+.rail .ent b{color:var(--h-fg);font-weight:400;opacity:.9}
+.rail .ent u{text-decoration:none;color:var(--h-dim)}
 .rail .ent.h u{color:var(--amber)}
 @keyframes march{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
