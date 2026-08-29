@@ -3,9 +3,12 @@
  * generator (~50 hand-built scenes, one archetype per destination family).
  * Logic is unchanged; only module syntax and type annotations were added
  * to satisfy `astro check` (browsers never type-checked the original).
- * Two `.replace(search, number)` call sites were adjusted to
- * `.replace(search, String(number))` — identical output, but
- * String.replace's TS signature requires a string replacement.
+ * Exception: A.stupa and A.mosque each carried a `${...}` that was never
+ * interpolated, patched over with a `.replace()` that only fixed one token.
+ * A.stupa's left `-150*s` survived into the `d` attribute as literal text,
+ * so browsers rejected the whole path and the two flanking stupas never
+ * drew (Thailand, Myanmar, Sri Lanka). Both are now interpolated properly;
+ * A.mosque's dome-cap rise is scaled by `s` to match every other value.
  */
 import { LM } from './lookup';
 
@@ -154,7 +157,7 @@ A.mosque=(r,C)=>{                                    /* Islamic-world archetype 
   for(let i=0;i<7;i++)o+=D(`M${x-176+i*52} ${b-120} q22 -34 44 0 Z`,C.near,.55);
   o+=D(`M${x-96} ${b-120} q96 -166 192 0 Z`,C.near)+R(x-4,b-296,8,42,C.near)+C_(x,b-300,10,C.acc,.9);
   [[x-230,.9],[x+230,.9],[x-300,.7],[x+300,.7]].forEach(([mx,s])=>{
-    o+=R(mx-11*s,b-250*s,22*s,250*s,C.mid)+D(`M${mx-16*s} ${b-250*s} q16*s -40 ${32*s} 0 Z`.replace('16*s',String(16*s)),C.near)+R(mx-2*s,b-286*s,4*s,36*s,C.near);});
+    o+=R(mx-11*s,b-250*s,22*s,250*s,C.mid)+D(`M${mx-16*s} ${b-250*s} q${16*s} ${-40*s} ${32*s} 0 Z`,C.near)+R(mx-2*s,b-286*s,4*s,36*s,C.near);});
   return o;};
 A.petra=(r,C)=>{                                     /* Jordan — Al-Khazneh */
   let o=R(0,0,W,H,C.far,.001);
@@ -232,7 +235,7 @@ A.stupa=(r,C)=>{                                     /* Myanmar / Sri Lanka */
   o+=R(x-170,b-40,340,40,C.mid);
   o+=D(`M${x-120} ${b-40} q0 -180 120 -230 q120 50 120 230 Z`,C.near);
   o+=D(`M${x-30} ${b-238} q30 -60 60 0 Z`,C.near)+L(`M${x} ${b-286} v-40`,C.near,5)+C_(x,b-332,9,C.acc,.9);
-  [[x-210,.7],[x+210,.7]].forEach(([sx,s])=>{o+=D(`M${sx-40*s} ${b} q0 -120*s ${40*s} -150*s q${40*s} ${30*s} ${40*s} ${150*s} Z`.replace('-120*s',String(-120*s)),C.mid)+L(`M${sx} ${b-150*s} v${-26*s}`,C.mid,3);});
+  [[x-210,.7],[x+210,.7]].forEach(([sx,s])=>{o+=D(`M${sx-40*s} ${b} q0 ${-120*s} ${40*s} ${-150*s} q${40*s} ${30*s} ${40*s} ${150*s} Z`,C.mid)+L(`M${sx} ${b-150*s} v${-26*s}`,C.mid,3);});
   return o;};
 A.eiffel=(r,C)=>{                                    /* France */
   let o='';for(let i=0;i<14;i++)o+=R(i*92,G-40-((i*61)%54),80,94,C.far);

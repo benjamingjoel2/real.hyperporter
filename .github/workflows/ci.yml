@@ -24,3 +24,12 @@ jobs:
 
       - name: astro build
         run: npx astro build
+        env:
+          # Build CI as a production deployment would be, so the SEO check
+          # below exercises the indexable path (canonicals, sitemap, robots)
+          # rather than the all-noindex preview path.
+          SITE_URL: https://ci.invalid
+          SITE_INDEXABLE: 'true'
+
+      - name: SEO invariants
+        run: node scripts/check-seo.mjs

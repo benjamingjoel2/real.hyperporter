@@ -1,4 +1,16 @@
-# Deploying Hyperporter
+# Deploying Hyperporter (self-hosted)
+
+> **This repository deploys to Vercel — see [VERCEL.md](VERCEL.md).**
+>
+> This document describes the original site's self-hosted Docker + nginx
+> stack, inherited when this repo was forked. Those files still work and
+> `docker-compose.dev.yml` is a handy way to run the site without installing
+> Node, but the server and domain below belong to the original deployment.
+>
+> One change since the fork: `SITE_URL` is now **required** rather than
+> defaulting to `hyperporter.com`, so a build here cannot silently bake the
+> other site's domain into this one's canonical tags. Set it in a `.env`
+> file beside `docker-compose.yml`.
 
 The site is a fully static Astro build. Docker builds it and nginx serves
 it. Nothing runs server-side at request time.
@@ -47,7 +59,7 @@ Only needed once, on a fresh server.
 **Steps**
 
 ```sh
-git clone https://github.com/benjamingjoel2/hyperporter.git /opt/hyperporter
+git clone https://github.com/benjamingjoel2/real.hyperporter.git /opt/hyperporter
 cd /opt/hyperporter
 
 # Issue the TLS certificate. Run this ONCE, before the first `up`.
