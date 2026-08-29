@@ -122,7 +122,11 @@ Astro (unless the CTO prefers otherwise). What it must produce:
 - SEO component: title, meta description, canonical, OG/Twitter, JSON-LD
   (`Organization`, `TouristDestination`, `BlogPosting`).
 - Auto `sitemap.xml` and `robots.txt`.
-- Deploy: Cloudflare Pages or Vercel, on push to `main`.
+- Deploy: **Vercel, on push to `main`** — settled, see `VERCEL.md`. This repo is
+  a fork serving its own domain, so nothing may hardcode `hyperporter.com`: the
+  origin resolves from the environment in `src/lib/site.mjs`, and
+  `scripts/check-seo.mjs` fails the build if a canonical points at the upstream
+  site. Preview deployments are noindex with no sitemap.
 
 Port the design system and the landmark SVG generator across as-is. They work.
 

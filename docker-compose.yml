@@ -11,9 +11,9 @@ services:
       context: .
       args:
         # Baked into the static build, so it must match the origin nginx
-        # actually serves. Override via SITE_URL in a .env file next to
-        # this compose file if deploying to a different hostname.
-        SITE_URL: ${SITE_URL:-https://hyperporter.com}
+        # actually serves. Required — set it in a .env file next to this
+        # compose file. There is deliberately no default: see the Dockerfile.
+        SITE_URL: ${SITE_URL:?set SITE_URL in a .env file beside this compose file}
     image: hyperporter-web
     restart: unless-stopped
     ports:

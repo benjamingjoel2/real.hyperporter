@@ -16,8 +16,12 @@ COPY . .
 # robots.txt are all baked in at build time from SITE_URL. It has to be
 # correct HERE, not at runtime — serving a build made with the wrong origin
 # would emit wrong canonical tags.
-ARG SITE_URL=https://hyperporter.com
+# No default: this repository is a fork, and inheriting the upstream domain
+# here would bake canonicals pointing at the other site into every page. The
+# post-build SEO check rejects that, so a build without SITE_URL fails loudly.
+ARG SITE_URL
 ENV SITE_URL=$SITE_URL
+ENV SITE_INDEXABLE=true
 RUN npm run build
 
 # ---- runtime --------------------------------------------------------------

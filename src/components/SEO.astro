@@ -1,4 +1,6 @@
 ---
+import { IS_PRODUCTION } from '../lib/site.mjs';
+
 interface Props {
   title: string;
   description: string;
@@ -27,12 +29,18 @@ const {
 } = Astro.props;
 
 const pageTitle = `${title} — Hyperporter`;
+
+// A page is indexable only on a production deployment. Vercel publishes every
+// preview and branch at its own crawlable URL; without this each one is a
+// complete copy of the site competing with production. Per-page `noindex`
+// still wins on top of that.
+const robotsNoindex = noindex || !IS_PRODUCTION;
 ---
 
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
-{noindex && <meta name="robots" content="noindex,nofollow" />}
+{robotsNoindex && <meta name="robots" content="noindex,nofollow" />}
 
 <meta property="og:type" content={ogType} />
 <meta property="og:title" content={pageTitle} />
