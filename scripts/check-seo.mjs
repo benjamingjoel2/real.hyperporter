@@ -48,6 +48,7 @@ for (const file of htmlFiles) {
     title: attr(html, /<title>([^<]*)<\/title>/i),
     description: attr(html, /<meta\s+name="description"\s+content="([^"]*)"/i),
     ogUrl: attr(html, /<meta\s+property="og:url"\s+content="([^"]+)"/i),
+    ogImage: attr(html, /<meta\s+property="og:image"\s+content="([^"]+)"/i),
   });
 }
 
@@ -61,6 +62,10 @@ for (const [route, p] of pages) {
   if (p.noindex) continue;
   if (!p.description) fail(`${route}: no meta description`);
   if (!p.canonical) fail(`${route}: no canonical`);
+  // A relative og:image yields no preview at all on LinkedIn, Slack or X —
+  // they fetch it off-origin, with nothing to resolve it against.
+  if (!p.ogImage) fail(`${route}: no og:image`);
+  else if (!/^https?:\/\//.test(p.ogImage)) fail(`${route}: og:image is not absolute (${p.ogImage})`);
 }
 
 // --- canonical origin is consistent, and is not the upstream site ---------

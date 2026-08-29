@@ -41,7 +41,7 @@
       ]
     },
     {
-      "source": "/hero.jpg",
+      "source": "/(hero.jpg|og.png)",
       "headers": [
         {
           "key": "Cache-Control",

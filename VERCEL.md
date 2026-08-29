@@ -127,7 +127,9 @@ Run it any time against a build with `npm run check:seo`. It fails on:
 - a canonical pointing at the upstream `hyperporter.com` origin;
 - canonicals spanning more than one origin;
 - a canonical or `og:url` that does not point at the page it is on;
-- an indexable page with no `<title>`, description or canonical;
+- an indexable page with no `<title>`, description, canonical or `og:image`;
+- an `og:image` that is not an absolute URL — relative ones yield no preview
+  at all, since every consumer fetches them off-origin;
 - a sitemap emitted alongside a `Disallow: /` robots.txt.
 
 It does **not** judge content quality. See the open items below for that.
@@ -194,15 +196,15 @@ These are not deployment blockers, but they are launch blockers.
 
 **Assets**
 
-- **No `og:image` anywhere.** Every share on LinkedIn, X, Slack and WhatsApp
-  renders as a bare text card. `SEO.astro` accepts an `ogImage` prop and
-  omits the tags when absent rather than pointing at a placeholder that
-  would 404. A single 1200×630 branded card wired as the sitewide default
-  would fix this for every page; per-destination images need the landmark
-  SVGs rasterised, which is a larger job.
+- **Per-destination `og:image`.** Every page currently shares one card
+  (`public/og.png`, 1200×630, drawn from the homepage hero — source in
+  `scripts/og/card.html`, regenerate with `node scripts/og/render.mjs`).
+  Giving each destination its own card means rasterising the landmark SVGs,
+  which is a larger job. The shared card is a real improvement over the bare
+  text card a missing `og:image` produces, but a destination-specific one
+  would convert better.
 - **`public/hero.jpg` is a placeholder** pending licensed photography, as are
-  the generated destination illustrations. At 1232×978 it is also the wrong
-  aspect for an OG image.
+  the generated destination illustrations.
 - **`/preview/oh` and `/preview/brandigo`** are throwaway design studies.
   They are `noindex` and out of the sitemap, but they do ship to the public
   domain. Consider removing them before launch.

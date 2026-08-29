@@ -7,13 +7,18 @@ interface Props {
   /** Absolute override; defaults to the canonical URL for the current request. */
   canonical?: string;
   /**
-   * Absolute URL. No site-wide fallback exists yet — the destination pages'
-   * OG images depend on a rasterization step for the landmark SVGs that
-   * hasn't been built. Omit until a real image is available; og:image and
-   * twitter:image are simply left out rather than pointing at a placeholder
-   * that would 404.
+   * Share image. Absolute, or root-relative and resolved against the site
+   * origin. Defaults to the sitewide card (public/og.png, drawn from the
+   * homepage hero — see scripts/og/card.html).
+   *
+   * Per-destination images are still open: they need the landmark SVGs
+   * rasterised, which is a larger job. Until then every page shares the one
+   * card, which is far better than the bare text card a missing og:image
+   * produces on LinkedIn, Slack and X.
    */
   ogImage?: string;
+  /** Describes the share image for screen readers. */
+  ogImageAlt?: string;
   ogType?: 'website' | 'article';
   /** Renders a noindex,nofollow robots tag. Destinations default to true — see src/content/config.ts. */
   noindex?: boolean;
@@ -23,10 +28,15 @@ const {
   title,
   description,
   canonical = new URL(Astro.url.pathname, Astro.site).toString(),
-  ogImage,
+  ogImage = '/og.png',
+  ogImageAlt = 'Hyperporter — run trips on autopilot. Autopilot software and the Horizon operator network, across 137 countries.',
   ogType = 'website',
   noindex = false,
 } = Astro.props;
+
+// og:image must be absolute — every consumer of it is off-origin, and a
+// root-relative path silently yields no preview at all.
+const ogImageUrl = new URL(ogImage, Astro.site).toString();
 
 const pageTitle = `${title} — Hyperporter`;
 
@@ -46,12 +56,16 @@ const robotsNoindex = noindex || !IS_PRODUCTION;
 <meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
-{ogImage && <meta property="og:image" content={ogImage} />}
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={ogImageAlt} />
 <meta property="og:site_name" content="Hyperporter" />
 
-<meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={description} />
-{ogImage && <meta name="twitter:image" content={ogImage} />}
+<meta name="twitter:image" content={ogImageUrl} />
+<meta name="twitter:image:alt" content={ogImageAlt} />
 
 <slot name="structured-data" />
