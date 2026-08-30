@@ -119,6 +119,11 @@ Specifically: it will suggest accent colours, gradients and motion. We have no
 accent colour, amber means one thing, and restraint is the point. Do not let a
 database result talk the site into decoration.
 
+The plugin's own `design` skill is renamed locally to `design-studio` — the
+name `design` collides with a built-in skill and the plugin's copy never
+loaded. Re-running `npx ui-ux-pro-max-cli init` restores the colliding name;
+rename it again if you do.
+
 ## Migration target
 
 Astro (unless the CTO prefers otherwise). What it must produce:
