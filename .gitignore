@@ -19,4 +19,8 @@ npm-debug.log*
 
 # TLS material and ACME challenge webroot created on the server by
 # scripts/init-letsencrypt.sh. Never commit certificates or private keys.
-data/
+/data/
+
+# python bytecode from skill scripts
+__pycache__/
+*.pyc
