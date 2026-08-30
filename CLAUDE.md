@@ -111,6 +111,14 @@ Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid
 "storing on publicly available servers". It is live on hyperporter.com at the
 founder's explicit instruction. A Dinamo **web** licence is still required.
 
+### The ui-ux-pro-max skill loses to this file
+`.claude/skills/` carries the UI/UX Pro Max plugin — 84 styles, 192 palettes,
+font pairings, animation presets. It is a reference to consult, not a mandate.
+Where its recommendations contradict anything above, the rules above win.
+Specifically: it will suggest accent colours, gradients and motion. We have no
+accent colour, amber means one thing, and restraint is the point. Do not let a
+database result talk the site into decoration.
+
 ## Migration target
 
 Astro (unless the CTO prefers otherwise). What it must produce:
