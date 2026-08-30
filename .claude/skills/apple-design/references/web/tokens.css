@@ -1,0 +1,267 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Apple Design — token sheet
+   Drop in, prune what you don't need, override --accent with the brand.
+   Components consume only the semantic layer. No raw hex below this file.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: light dark;
+
+  /* ── Type ────────────────────────────────────────────────────────────── */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable",
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: ui-serif, "New York", "Iowan Old Style", Charter, Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --font-rounded: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+
+  --text-large-title: 2.125rem;  --lh-large-title: 2.5625rem;   /* 34 / 41 */
+  --text-title-1:     1.75rem;   --lh-title-1:     2.125rem;    /* 28 / 34 */
+  --text-title-2:     1.375rem;  --lh-title-2:     1.75rem;     /* 22 / 28 */
+  --text-title-3:     1.25rem;   --lh-title-3:     1.5625rem;   /* 20 / 25 */
+  --text-body:        1.0625rem; --lh-body:        1.375rem;    /* 17 / 22 */
+  --text-callout:     1rem;      --lh-callout:     1.3125rem;   /* 16 / 21 */
+  --text-subhead:     0.9375rem; --lh-subhead:     1.25rem;     /* 15 / 20 */
+  --text-footnote:    0.8125rem; --lh-footnote:    1.125rem;    /* 13 / 18 */
+  --text-caption-1:   0.75rem;   --lh-caption-1:   1rem;        /* 12 / 16 */
+  --text-caption-2:   0.6875rem; --lh-caption-2:   0.8125rem;   /* 11 / 13 */
+
+  --text-display: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-display: -0.03em;
+  --tracking-title: -0.02em;
+  --tracking-body: 0;
+  --tracking-caption: 0.01em;
+  --tracking-eyebrow: 0.06em;
+
+  --measure: 65ch;
+
+  /* ── Space (4px grid) ────────────────────────────────────────────────── */
+  --space-1: 0.25rem;   --space-2: 0.5rem;   --space-3: 0.75rem;
+  --space-4: 1rem;      --space-5: 1.25rem;  --space-6: 1.5rem;
+  --space-8: 2rem;      --space-10: 2.5rem;  --space-12: 3rem;
+  --space-16: 4rem;     --space-20: 5rem;    --space-24: 6rem;
+  --space-32: 8rem;
+
+  --page-margin: var(--space-4);
+  --container-sm: 704px;
+  --container-md: 980px;
+  --container-lg: 1200px;
+  --container-xl: 1440px;
+
+  /* ── Radii ───────────────────────────────────────────────────────────── */
+  --radius-xs: 4px;   --radius-sm: 6px;   --radius-md: 10px;
+  --radius-lg: 14px;  --radius-xl: 20px;  --radius-2xl: 28px;
+  --radius-full: 9999px;
+
+  /* ── Controls ────────────────────────────────────────────────────────── */
+  --control-sm: 28px;
+  --control-md: 36px;
+  --control-lg: 44px;
+  --target-min: 44px;
+
+  /* ── Motion ──────────────────────────────────────────────────────────── */
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --duration-slower: 500ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-standard: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: linear(0, 0.006, 0.025, 0.101, 0.539, 0.826, 0.962, 1.023,
+                        1.04, 1.032, 1.013, 0.999, 0.994, 1);
+
+  /* ── Elevation ───────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08), 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.12), 0 2px 6px rgb(0 0 0 / 0.05);
+  --shadow-xl: 0 24px 64px rgb(0 0 0 / 0.16), 0 4px 12px rgb(0 0 0 / 0.06);
+
+  /* ── Semantic colour — LIGHT (the default) ───────────────────────────── */
+  --bg: #FFFFFF;
+  --bg-secondary: #F2F2F7;
+  --bg-tertiary: #FFFFFF;
+  --bg-grouped: #F2F2F7;
+  --bg-grouped-secondary: #FFFFFF;
+
+  --surface: #FFFFFF;
+  --surface-elevated: #FFFFFF;
+  --surface-overlay: #FFFFFF;
+
+  --text-primary: #000000;
+  --text-secondary: rgb(60 60 67 / 0.60);
+  --text-tertiary: rgb(60 60 67 / 0.30);   /* placeholder / disabled only */
+  --text-quaternary: rgb(60 60 67 / 0.18); /* decorative only */
+  --text-on-accent: #FFFFFF;
+
+  --separator: rgb(60 60 67 / 0.29);
+  --separator-opaque: #C6C6C8;
+
+  --fill-primary: rgb(120 120 128 / 0.20);
+  --fill-secondary: rgb(120 120 128 / 0.16);
+  --fill-tertiary: rgb(118 118 128 / 0.12);
+  --fill-quaternary: rgb(116 116 128 / 0.08);
+
+  --accent: #007AFF;
+  --accent-hover: #0071EB;
+  --accent-pressed: #0062CC;
+  --accent-subtle: rgb(0 122 255 / 0.12);
+
+  --danger: #FF3B30;
+  --warning: #FF9500;
+  --success: #34C759;
+  --info: #007AFF;
+
+  --glass-bg: rgb(255 255 255 / 0.72);
+  --glass-blur: blur(30px) saturate(1.4);
+}
+
+/* ── Semantic colour — DARK ─────────────────────────────────────────────
+   Defined twice so a manual .light / .dark class wins in both directions. */
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg: #000000;
+    --bg-secondary: #1C1C1E;
+    --bg-tertiary: #2C2C2E;
+    --bg-grouped: #000000;
+    --bg-grouped-secondary: #1C1C1E;
+
+    --surface: #1C1C1E;
+    --surface-elevated: #2C2C2E;
+    --surface-overlay: #3A3A3C;
+
+    --text-primary: #FFFFFF;
+    --text-secondary: rgb(235 235 245 / 0.60);
+    --text-tertiary: rgb(235 235 245 / 0.30);
+    --text-quaternary: rgb(235 235 245 / 0.16);
+
+    --separator: rgb(84 84 88 / 0.65);
+    --separator-opaque: #38383A;
+
+    --fill-primary: rgb(120 120 128 / 0.36);
+    --fill-secondary: rgb(120 120 128 / 0.32);
+    --fill-tertiary: rgb(118 118 128 / 0.24);
+    --fill-quaternary: rgb(118 118 128 / 0.18);
+
+    --accent: #0A84FF;
+    --accent-hover: #339CFF;
+    --accent-pressed: #0071EB;
+    --accent-subtle: rgb(10 132 255 / 0.18);
+
+    --danger: #FF453A;
+    --warning: #FF9F0A;
+    --success: #30D158;
+    --info: #0A84FF;
+
+    --glass-bg: rgb(28 28 30 / 0.72);
+
+    --shadow-md: 0 4px 12px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.5);
+    --shadow-xl: 0 24px 64px rgb(0 0 0 / 0.6);
+  }
+}
+
+:root.dark {
+  --bg: #000000;
+  --bg-secondary: #1C1C1E;
+  --bg-tertiary: #2C2C2E;
+  --bg-grouped: #000000;
+  --bg-grouped-secondary: #1C1C1E;
+
+  --surface: #1C1C1E;
+  --surface-elevated: #2C2C2E;
+  --surface-overlay: #3A3A3C;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: rgb(235 235 245 / 0.60);
+  --text-tertiary: rgb(235 235 245 / 0.30);
+  --text-quaternary: rgb(235 235 245 / 0.16);
+
+  --separator: rgb(84 84 88 / 0.65);
+  --separator-opaque: #38383A;
+
+  --fill-primary: rgb(120 120 128 / 0.36);
+  --fill-secondary: rgb(120 120 128 / 0.32);
+  --fill-tertiary: rgb(118 118 128 / 0.24);
+  --fill-quaternary: rgb(118 118 128 / 0.18);
+
+  --accent: #0A84FF;
+  --accent-hover: #339CFF;
+  --accent-pressed: #0071EB;
+  --accent-subtle: rgb(10 132 255 / 0.18);
+
+  --danger: #FF453A;
+  --warning: #FF9F0A;
+  --success: #30D158;
+  --info: #0A84FF;
+
+  --glass-bg: rgb(28 28 30 / 0.72);
+
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 24px 64px rgb(0 0 0 / 0.6);
+}
+
+/* ── Responsive page margin ─────────────────────────────────────────────── */
+@media (min-width: 480px)  { :root { --page-margin: var(--space-5); } }
+@media (min-width: 768px)  { :root { --page-margin: var(--space-6); } }
+@media (min-width: 1024px) { :root { --page-margin: var(--space-8); } }
+@media (min-width: 1440px) { :root { --page-margin: var(--space-10); } }
+
+/* ── Increased contrast ─────────────────────────────────────────────────── */
+@media (prefers-contrast: more) {
+  :root {
+    --text-secondary: rgb(60 60 67 / 0.85);
+    --separator: rgb(60 60 67 / 0.55);
+  }
+  :root.dark, :root:not(.light) {
+    --text-secondary: rgb(235 235 245 / 0.85);
+    --separator: rgb(200 200 205 / 0.60);
+  }
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  -webkit-text-size-adjust: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-md);
+  margin-inline: auto;
+  padding-inline: max(var(--page-margin), env(safe-area-inset-left));
+}
+
+/* ── Reduced motion — the kill switch. Keep it. ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Reduced transparency ───────────────────────────────────────────────── */
+@media (prefers-reduced-transparency: reduce) {
+  :root { --glass-bg: var(--bg); --glass-blur: none; }
+}
