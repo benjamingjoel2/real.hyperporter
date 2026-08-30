@@ -119,10 +119,16 @@ Specifically: it will suggest accent colours, gradients and motion. We have no
 accent colour, amber means one thing, and restraint is the point. Do not let a
 database result talk the site into decoration.
 
-The plugin's own `design` skill is renamed locally to `design-studio` — the
-name `design` collides with a built-in skill and the plugin's copy never
-loaded. Re-running `npx ui-ux-pro-max-cli init` restores the colliding name;
-rename it again if you do.
+Two local fixes to the plugin as shipped, both of which a reinstall reverts:
+
+- The plugin's own `design` skill is renamed to `design-studio`. The name
+  `design` collides with a built-in skill, so the plugin's copy never loaded.
+  The directory and the `name:` in its frontmatter have to match.
+- Its docs prefixed every command with `~/.claude/skills/...`, which assumes a
+  global install. This install is project-local, so none of them resolved.
+  Now project-relative from the repo root, like the other skills.
+
+Re-running `npx ui-ux-pro-max-cli init` overwrites both. Redo them if you do.
 
 ## Migration target
 
