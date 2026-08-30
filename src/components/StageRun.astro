@@ -1,0 +1,66 @@
+---
+/**
+ * The nine pipeline stages as a single run, for the homepage hero.
+ *
+ * This is the hero's argument, not decoration. The reference sites anchor
+ * a hero with a product screenshot or a map; neither says the one thing
+ * that distinguishes Autopilot, which is *where it stops*. Seven steps
+ * resolve on their own. Two are marked amber because a person has to do
+ * them — marking the payment, and the call that has to be made while the
+ * traveller is on the ground.
+ *
+ * Amber follows the sitewide rule: it means a human touchpoint and nothing
+ * else. The two amber rows are the only ones carrying a note, because they
+ * are the only ones that need explaining; the run labels itself and needs
+ * no key.
+ *
+ * Rows show the stage codes (INQ, PLN, QTE...) rather than 01..09. The
+ * sequence is real, so ordinals would be honest, but the codes are the
+ * product's own vocabulary and carry more identity than the numbers.
+ *
+ * The run animates on load: rows resolve top to bottom and the rail draws
+ * with them, holding before each amber row so the stop is legible rather
+ * than incidental. It is CSS-only — the markup renders fully resolved, and
+ * the animation is applied only inside `prefers-reduced-motion:
+ * no-preference`, so reduced motion (and any failure to load the
+ * stylesheet) shows the finished state with nothing missing.
+ */
+import { STAGES } from '../lib/stages';
+
+/** What the person does at each human touchpoint. Kept here rather than in
+ *  STAGES because it is hero copy — second person, one line — where the
+ *  shared `note` field is written in the third person for the diagrams. */
+const HUMAN_NOTE: Record<string, string> = {
+  BKG: 'You mark the payment',
+  TRV: 'You take the urgent call',
+};
+
+/* When each row lands. Every row draws the connector down to the next one
+   at its own delay, so the run reads as a single line advancing. The two
+   human rows are deliberately late: the gap before them is the hold, and
+   the hold is the point. */
+const DELAY: Record<number, number> = {
+  0: 0, 1: 150, 2: 300, 3: 450, 4: 1000, 5: 1150, 6: 1700, 7: 1850, 8: 2000,
+};
+---
+
+<div class="sr">
+  <ol class="sr-list" aria-label="The nine steps of a trip">
+    {
+      STAGES.map((s, i) => {
+        const human = s.cls === 'Human touchpoint';
+        return (
+          <li
+            class:list={['sr-row', { human }]}
+            style={`--d:${DELAY[i]}ms`}
+          >
+            <span class="sr-dot" aria-hidden="true" />
+            <span class="sr-code">{s.c}</span>
+            <span class="sr-name">{s.name}</span>
+            {human && <span class="sr-note">{HUMAN_NOTE[s.c]}</span>}
+          </li>
+        );
+      })
+    }
+  </ol>
+</div>

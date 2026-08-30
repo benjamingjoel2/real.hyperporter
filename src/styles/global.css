@@ -742,6 +742,10 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
 
 .hx{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
 .hx-sec{padding-block:var(--sec)}
+/* For a section that continues the one above it rather than starting a new
+   subject -- the homepage's region rows under the coverage band. A full
+   --sec on top of the band's own padding reads as a break, not a run-on. */
+.hx-sec-tight{padding-top:clamp(44px,5vw,76px)}
 .hx-rule{border-top:1px solid var(--line)}
 
 /* --- hero: headline left, support right ------------------- */
@@ -1137,7 +1141,10 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
 .wm-k.on::before{background:var(--wm-on)}
 
 @media(prefers-reduced-motion:reduce){.wm-on path,.wm-dots circle{transition:none}}
-.hx-mapband{background:var(--dark);padding-block:clamp(46px,5.5vw,88px);scroll-margin-top:120px}
+.hx-mapband{background:var(--dark);color:#fff;padding-block:clamp(46px,5.5vw,88px);scroll-margin-top:120px}
+/* the homepage puts its coverage heading inside the band, so the lede
+   needs the dark-ground dim rather than --muted */
+.hx-mapband .hx-mid p{color:var(--dim-d)}
 /* backdrop variant: no frame, no chrome, links inert */
 .wm.bare .wm-frame{background:none;padding:0;border-radius:0}
 .wm.bare a{pointer-events:none}
@@ -1148,24 +1155,78 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
    headline. The rest of the site stays light -- this is a moment,
    not a theme.
    ============================================================ */
-.hx-shero{position:relative;overflow:hidden;background:#0B0A09;color:#fff;display:flex;align-items:flex-end;min-height:clamp(520px,74vh,860px);padding-block:clamp(60px,9vw,130px)}
-/* the map is the flex item, so it must be told not to shrink */
-.hx-shero-map{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.hx-shero-map .wm{flex:none;width:132%;max-width:none}
-.hx-shero-map .wm-on path,.hx-shero-map .wm-dots circle{fill:rgba(255,255,255,.30)}
-.hx-shero-map .wm-base path{fill:rgba(255,255,255,.055);stroke:none}
-.hx-shero-map .wm-on path{stroke:none}
-.hx-shero::after{content:"";position:absolute;inset:0;pointer-events:none;background:
-  radial-gradient(120% 90% at 18% 82%,rgba(11,10,9,.94),rgba(11,10,9,.42) 58%,transparent 78%),
-  linear-gradient(180deg,rgba(11,10,9,.72) 0%,transparent 26%,rgba(11,10,9,.55) 100%)}
-.hx-shero-in{position:relative;z-index:2;width:100%}
-.hx-shero-h{font-family:var(--display);font-weight:400;font-size:clamp(40px,7vw,96px);line-height:1.0;letter-spacing:-.014em;margin:0 0 26px;max-width:15ch}
-.hx-shero-in p{font-size:clamp(17px,1.45vw,21px);line-height:1.5;color:rgba(255,255,255,.78);max-width:52ch;margin:0 0 34px;letter-spacing:-.008em}
+.hx-shero{
+  --amber-d:#E8A33C;               /* amber tuned for the dark ground; the
+                                      light-page --amber goes muddy here */
+  position:relative;overflow:hidden;background:#0B0A09;color:#fff;
+  display:flex;align-items:center;
+  min-height:clamp(540px,76vh,860px);padding-block:clamp(64px,8vw,116px);
+}
+.hx-shero-in{
+  position:relative;z-index:2;width:100%;max-width:min(95vw,1280px);margin-inline:auto;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,400px);
+  align-items:center;gap:clamp(40px,5vw,88px);
+}
+.hx-shero-copy{min-width:0}
+.hx-shero-h{font-family:var(--display);font-weight:400;font-size:clamp(38px,4.9vw,72px);line-height:1.02;letter-spacing:-.018em;margin:0 0 24px;max-width:16ch}
+.hx-shero-in p{font-size:clamp(16.5px,1.25vw,19.5px);line-height:1.55;color:rgba(255,255,255,.66);max-width:44ch;margin:0 0 32px;letter-spacing:-.008em}
+.hx-shero-in p.hx-shero-note{margin:28px 0 0;font-size:14.5px;color:rgba(255,255,255,.42);max-width:42ch}
 .hx-shero .btn{background:#fff;color:#0B0A09;border-color:#fff}
 .hx-shero .btn:hover{background:transparent;color:#fff}
 .hx-shero .btn-o{border-color:rgba(255,255,255,.42);color:#fff}
 .hx-shero .btn-o:hover{background:#fff;color:#0B0A09;border-color:#fff}
-@media(max-width:700px){.hx-shero-map{opacity:.34}}
+/* the sitewide focus ring is --signal, a warm grey that all but vanishes
+   on this ground -- the hero's primary call to action needs a visible one */
+.hx-shero :focus-visible{outline-color:#fff}
+
+/* --- the nine-step run ------------------------------------
+   Seven steps resolve on their own; two are amber because a person has to
+   do them. Rendered fully resolved -- the animation below is additive and
+   scoped to `prefers-reduced-motion: no-preference`, so the finished state
+   is what shows if it never runs. */
+.sr{min-width:0}
+.sr-list{list-style:none;margin:0;padding:0}
+.sr-row{
+  --dot-y:19px;
+  position:relative;display:grid;grid-template-columns:24px 56px minmax(0,1fr);
+  padding:9px 0;
+}
+/* the segment from this row's dot down to the next row's -- height:100% is
+   exactly that distance, because every dot sits --dot-y from its row top */
+.sr-row::before{
+  content:"";position:absolute;left:11px;top:var(--dot-y);width:1px;height:100%;
+  background:rgba(255,255,255,.26);transform-origin:top;
+}
+.sr-row:last-child::before{display:none}
+.sr-dot{
+  grid-column:1;align-self:start;position:relative;z-index:1;
+  width:7px;height:7px;margin-top:calc(var(--dot-y) - 3.5px);border-radius:50%;
+  background:rgba(255,255,255,.62);box-shadow:0 0 0 3px #0B0A09;
+}
+.sr-code{grid-column:2;font-family:var(--mono);font-size:12px;line-height:22px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.38)}
+.sr-name{grid-column:3;font-size:17px;line-height:22px;letter-spacing:-.008em;color:rgba(255,255,255,.92)}
+.sr-note{grid-column:3;font-size:14px;line-height:20px;margin-top:2px;letter-spacing:-.005em;color:var(--amber-d)}
+.sr-row.human .sr-dot{
+  width:9px;height:9px;margin-top:calc(var(--dot-y) - 4.5px);
+  background:var(--amber-d);box-shadow:0 0 0 3px #0B0A09,0 0 0 4px rgba(232,163,60,.34);
+}
+
+@media(prefers-reduced-motion:no-preference){
+  .sr-row{opacity:.2;animation:sr-in .5s cubic-bezier(.2,.8,.2,1) var(--d) both}
+  .sr-row::before{animation:sr-draw .42s linear var(--d) both}
+}
+@keyframes sr-in{from{opacity:.2}to{opacity:1}}
+@keyframes sr-draw{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+@media(max-width:980px){
+  .hx-shero{align-items:flex-start}
+  .hx-shero-in{grid-template-columns:1fr;gap:clamp(36px,7vw,56px)}
+  .hx-shero-h{max-width:18ch}
+  .sr-row{--dot-y:16px;padding:5px 0;grid-template-columns:22px 48px minmax(0,1fr)}
+  .sr-row::before{left:10px}
+  .sr-name{font-size:15px;line-height:20px}
+  .sr-code{line-height:20px}
+}
 
 /* --- hover bubble ----------------------------------------- */
 .wm{position:relative}

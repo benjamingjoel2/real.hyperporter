@@ -13,6 +13,12 @@
  *    the stage detail panel. It re-points at a different pipeline stage
  *    per placement, which a captured image could not do.
  *  - the destination artwork, at full bleed, for the network sections.
+ *  - StageRun, in the hero. The hero used to be a headline over a dimmed
+ *    world map, which said "global" and little else, and overstated the
+ *    automation in the bargain. It now carries the nine stages as a single
+ *    run that stops on the two a person owns, which is the actual argument
+ *    for the product. The map moved down to the coverage band, where its
+ *    covered / not-covered distinction is legible.
  *
  * Still deliberately absent, because they cannot be filled honestly:
  *  - the client-logo wall. No logos exist to show; inventing them would be
@@ -25,6 +31,7 @@
  */
 import Base from '../layouts/Base.astro';
 import AppShot from '../components/AppShot.astro';
+import StageRun from '../components/StageRun.astro';
 import WorldMap from '../components/WorldMap.astro';
 import { destArt } from '../lib/landmark/generator';
 import { STAGES } from '../lib/stages';
@@ -38,6 +45,15 @@ const COVERED = REGIONS.filter((r) => destinations.some((d) => d.data.region ===
 const AUTO = STAGES.filter((s) => s.cls === 'Automatic').length;
 const HUMAN = STAGES.length - AUTO;
 
+/* The hero sentence reads as prose, so its figures are spelled out, but
+   they are still counted from STAGES rather than typed in — change the
+   pipeline and the copy follows. Falls back to the numeral above twelve,
+   where words stop being the clearer form anyway. */
+const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+  'eight', 'nine', 'ten', 'eleven', 'twelve'];
+const word = (n: number) => WORDS[n] ?? String(n);
+const sentenceCase = (s: string) => s[0].toUpperCase() + s.slice(1);
+
 const frameArt = destArt('Peru', 'frame-bg');
 const horizonArt = destArt('Kenya', 'card-hz', 'dark');
 const bandArt = destArt('Morocco', 'band-bg', 'dark');
@@ -50,17 +66,25 @@ const bandArt = destArt('Morocco', 'band-bg', 'dark');
 >
   <!-- ============ HERO ============ -->
   <section class="hx-shero">
-    <div class="hx-shero-map" aria-hidden="true"><WorldMap bare /></div>
     <div class="hx hx-shero-in">
-      <h1 class="hx-shero-h">Run trips on autopilot.</h1>
-      <p>
-        Autopilot coordinates the work between you, your traveller and the operator on the
-        ground. Horizon is the network of operators it reaches — {COUNTRIES} countries.
-      </p>
-      <div class="hx-ph-cta">
-        <a class="btn" href="/signup">Request a demo</a>
-        <a class="btn-o" href="/destinations">See coverage</a>
+      <div class="hx-shero-copy">
+        <h1 class="hx-shero-h">The trip runs itself, until it needs you.</h1>
+        <p>
+          Autopilot coordinates you, your traveller and the operator on the ground. {
+            sentenceCase(word(AUTO))
+          } of the {word(STAGES.length)} steps run on their own. {
+            sentenceCase(word(HUMAN))
+          } are yours.
+        </p>
+        <div class="hx-ph-cta">
+          <a class="btn" href="/signup">Request a demo</a>
+          <a class="btn-o" href="/destinations">See coverage</a>
+        </div>
+        <p class="hx-shero-note">
+          Bring your own operators, or reach ours — Horizon covers {COUNTRIES} countries.
+        </p>
       </div>
+      <StageRun />
     </div>
   </section>
 
@@ -74,14 +98,23 @@ const bandArt = destArt('Morocco', 'band-bg', 'dark');
   </section>
 
   <!-- ============ COVERAGE ============ -->
-  <!-- The map itself lives in the hero above and in full on /destinations.
-       Repeating it here would say the same thing twice and cost another
-       120KB of path data on one page. -->
-  <section class="hx hx-sec">
-    <div class="hx-mid">
-      <h2>Operators in {COUNTRIES} countries</h2>
-      <p>Vetted ground partners across every region Horizon reaches.</p>
+  <!-- The map sits here rather than behind the hero. Its whole point is the
+       covered / not-covered distinction, and as a hero backdrop that read
+       as texture: dimmed to 30% white under a scrim, the two states were
+       indistinguishable, so 120KB of path data bought nothing but tone.
+       Here it is at full contrast, against the count it illustrates. The
+       interactive version stays on /destinations. -->
+  <section class="hx-mapband">
+    <div class="hx">
+      <div class="hx-mid">
+        <h2>Operators in {COUNTRIES} countries</h2>
+        <p>Vetted ground partners across every region Horizon reaches.</p>
+      </div>
+      <WorldMap />
     </div>
+  </section>
+
+  <section class="hx hx-sec hx-sec-tight">
     <div class="hx-rows">
       {
         COVERED.map((r, i) => (
